@@ -1,15 +1,15 @@
 const App=React.createClass({
 
     getInitialState:function () {
-      return {
-          elements:[],
-          isEditor:true
-      }
+        return {
+            elements:[],
+            isEditor:true
+        }
     },
     toggle:function () {
 
         this.setState({
-        isEditor:!this.state.isEditor
+            isEditor:!this.state.isEditor
         });
     },
     addElement:function (element) {
@@ -17,51 +17,39 @@ const App=React.createClass({
         elements.push(element);
         this.setState({elements});
     },
-    deleteElements:function (index) {
-        const elements=this.state.elements;
-        elements.splice(index,1);
-        this.setState({elements});
-    },
- render:function(){
-     var isEditor = this.state.isEditor;
-     return <div>
 
-      <button onClick={this.toggle}>{isEditor ?"Previewor" :"Editor"}</button>
-      <div className={isEditor ?"":"hidden"}>
-          <Editor  elements={this.state.elements} onAdd={this.addElement} delete={this.deleteElement}/>
-      </div>
-      <div className={isEditor ? "hidden":""}>
-          <Previewor elements={this.state.elements}/>
-      </div>
-  </div>
- }
+    render:function(){
+        var isEditor = this.state.isEditor;
+        return <div>
+
+            <button onClick={this.toggle}>{isEditor ?"Previewor" :"Editor"}</button>
+            <div className={isEditor ?"":"hidden"}>
+                <Editor  elements={this.state.elements} add={this.addElement} />
+            </div>
+            <div >
+                <Previewor />
+            </div>
+        </div>
+    }
 });
 
 const Editor=React.createClass({
 
- render:function(){
-  return <div>
-      <Left  elements={this.props.elements} onDelete={this.props.delete}/>
-      <Right  onAdd={this.props.onAdd}/>
-  </div>
- }
+    render:function(){
+        return <div>
+            <Left  />
+            <Right  onAdd={this.props.add}/>
+        </div>
+    }
 });
 const Left=React.createClass({
 
-    remove:function (index) {
-      this.props.onDelete(index);
-    },
- render:function(){
-     const elements=this.props.elements.map((ele,index)=>{
-         return <div key={index}>
-             <input type={ele} />
-             <button onClick={this.remove.bind(this,index)}>X</button>
-         </div>
-     })
-  return <div>
-      {elements}
-  </div>
- }
+    render:function(){
+
+        return <div>
+
+        </div>
+    }
 });
 
 const Right=React.createClass({
@@ -81,14 +69,8 @@ const Right=React.createClass({
 const Previewor=React.createClass({
 
     render:function(){
-        const elements=this.props.elements.map((ele,index)=>{
-            return <div key={index}>
-                <input type={ele} />
-            </div>
-        })
         return <div>
-            {elements}
-            <button>submit</button>
+
         </div>
     }
 });
