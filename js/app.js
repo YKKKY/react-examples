@@ -9,12 +9,17 @@ const App = React.createClass({
         this.setState({
             isEditor:!this.state.isEditor});
     },
+    addElement:function (element) {
+        const elements = this.state.elements;
+        elements.push(element);
+        this.setState({elements});
+    },
     render: function () {
         const isEditor = this.state.isEditor;
         return <div>
             <button  onClick={this.toggle}>{isEditor ? "Previewor" :"Editor"}</button>
             <div  className={isEditor ? "hidden" :""}>
-                <Editor />
+                <Editor element={this.state.elements} onAdd={this.addElement}/>
             </div>
             <div  className={isEditor ? "" :"hidden"}>
                 <Previewor />
@@ -28,7 +33,7 @@ const Editor = React.createClass({
     render: function () {
         return <div>
             <Left />
-            <Right />
+            <Right  onAdd={this.props.onAdd}/>
         </div>
     }
 });
@@ -36,15 +41,25 @@ const Editor = React.createClass({
 const Left=React.createClass({
 
  render:function(){
-  return <div>框框</div>
+  return <div></div>
  }
 });
 const Right=React.createClass({
 
- render:function(){
-  return <div>添加事件的按钮</div>
- }
-})
+    add: function () {
+        const element = $("input[name=element]:checked").val();
+        this.props.onAdd(element);
+    },
+    render: function() {
+        return <div>
+            <input type="radio" name="element" value="text" />Text
+            <input type="radio" name="element" value="date" />Date
+            <button onClick={this.add}>+</button>
+        </div>
+    }
+
+});
+
 const Previewor = React.createClass({
 
     render: function () {
