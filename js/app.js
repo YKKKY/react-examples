@@ -17,11 +17,10 @@ const App=React.createClass({
         elements.push(element);
         this.setState({elements});
     },
-    deleteElement:function (index) {
+    deleteElements:function (index) {
         const elements=this.state.elements;
         elements.splice(index,1);
         this.setState({elements});
-
     },
     render:function(){
         var isEditor = this.state.isEditor;
@@ -29,9 +28,9 @@ const App=React.createClass({
 
             <button onClick={this.toggle}>{isEditor ?"Previewor" :"Editor"}</button>
             <div className={isEditor ?"":"hidden"}>
-                <Editor  elements={this.state.elements} add={this.addElement} delete={this.deleteElement}/>
+                <Editor  elements={this.state.elements} onAdd={this.addElement} delete={this.deleteElement}/>
             </div>
-            <div className={isEditor ?"hidden":""}>
+            <div className={isEditor ? "hidden":""}>
                 <Previewor elements={this.state.elements}/>
             </div>
         </div>
@@ -42,22 +41,23 @@ const Editor=React.createClass({
 
     render:function(){
         return <div>
-            <Left elements={this.props.elements} onDelete={this.delete} />
-            <Right  onAdd={this.props.add}/>
+            <Left  elements={this.props.elements} onDelete={this.props.delete}/>
+            <Right  onAdd={this.props.onAdd}/>
         </div>
     }
 });
 const Left=React.createClass({
+
     remove:function (index) {
-      this.props.onDelete(index);
+        this.props.onDelete(index);
     },
     render:function(){
-            const elements=this.props.elements.map((ele,index)=>{
-               return <div key={index}>
-                   <input type={ele}/>
-                   <button onClick={this.remove.bind(this,index)}>X</button>
-               </div>
-            });
+        const elements=this.props.elements.map((ele,index)=>{
+            return <div key={index}>
+                <input type={ele} />
+                <button onClick={this.remove.bind(this,index)}>X</button>
+            </div>
+        })
         return <div>
             {elements}
         </div>
@@ -83,10 +83,9 @@ const Previewor=React.createClass({
     render:function(){
         const elements=this.props.elements.map((ele,index)=>{
             return <div key={index}>
-                <input type={ele}/>
+                <input type={ele} />
             </div>
-        });
-
+        })
         return <div>
             {elements}
             <button>submit</button>
